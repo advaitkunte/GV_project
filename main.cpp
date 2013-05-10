@@ -12,9 +12,6 @@ int allowed[25][25];
 
 char quote[8][8];
 
-//int allowed[25][25];
-//int ax[25]={0,5,10,15,20,0,5,10,15,20,0,5,10,15,20,0,5,10,15,20,0,5,10,15,20};
-//int ay[25]={0,0,0,0,0,5,5,5,5,5,10,10,10,10,10,15,15,15,15,15,20,20,20,20,20};
 int ax[25]= {0,8,16,24,32,0,8,16,24,32,0,8,16,24,32,0,8,16,24,32,0,8,16,24,32};
 int ay[25]= {0,0,0,0,0,8,8,8,8,8,16,16,16,16,16,24,24,24,24,24,32,32,32,32,32};
 
@@ -32,30 +29,19 @@ void border()
         glVertex2i(ax[i],ay[i]+8);
         glEnd();
     }
-    /*for(int i=0;i<25;i++)
-
-    	{
-    	glColor3f(0.0,0.0,0.0);
-    	glBegin(GL_LINES);
-    	glVertex2i(ax[i]+10,ay[i]);
-    	glVertex2i(ax[i]+10,ay[i]+10);
-    	glEnd();
-    }*/
     glFlush();
 }
 
 int findblock(int x, int y)
 {
-
-    x=(x/10)-39;
-    y=64-(y/10);
+    x=(x/10)-4;
+    y=45-(y/10);
     printf(" x= %d , y=%d \n",x,y);
     for(int i=0; i<25; i++)
     {
         if(((x-ax[i]) < 8) && ((y-ay[i])< 8))
             return i;
     }
-
 }
 
 void hideblock(int cur)
@@ -75,24 +61,16 @@ void displayblock(int i)
 {
     border();
 
-
     glColor3f(0.3,0.3,0.3);
     glBegin(GL_POLYGON);
     glVertex2d(ax[i],ay[i]);
     glVertex2d(ax[i]+8,ay[i]);
     glVertex2d(ax[i]+8,ay[i]+8);
     glVertex2d(ax[i],ay[i]+8);
-
     glEnd();
+    
     glFlush();
-
     border();
-}
-
-void spinDisplay (void)
-{
-    //Future plans
-    //glutPostRedisplay();
 }
 
 int score=25;
@@ -152,14 +130,11 @@ void resizeHandler( int w, int h )
     glLoadIdentity();
     gluPerspective(30.0, aspecRatio, 3.0, 8888.0 );
     gluLookAt( 0.0, 0.0, 100.0,  0.0, 0.0, 0.0,  0.0, 1.0, 0.0 );
-//glutPostRedisplay();
-//ww=w; wh=h;
     return;
 }
 
 void display(void)
 {
-
     glClear(GL_COLOR_BUFFER_BIT);
     glTranslatef(-20.0,-20.0,10.0);
     for(int i=0; i<25; i++)
@@ -217,7 +192,6 @@ void a()
     allowed[8][11]=1;
     allowed[8][17]=1;
     allowed[8][19]=1;
-    // allowed[9][3]=1;
     allowed[9][12]=1;
     allowed[9][18]=1;
     allowed[10][1]=1;
@@ -298,17 +272,12 @@ void myinit()
 
 int main(int argc, char **argv)
 {
-    /*for(int i=0;i<25;i++)
-    	for(int j=0;j<25;j++)
-    		 allowed[i][j]=1;*/
-
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_SINGLE|GLUT_RGB);
     glutInitWindowSize(500, 500);
     glutCreateWindow("Knight Move");
     glutDisplayFunc(display);
     glutReshapeFunc(resizeHandler);
-//    glutIdleFunc(spinDisplay);
     glutMouseFunc(myMouse);
     myinit();
     a();
