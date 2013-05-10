@@ -47,8 +47,8 @@ void border()
 int findblock(int x, int y)
 {
 
-    x=(x/10)-4;
-    y=45-(y/10);
+    x=(x/10)-39;
+    y=64-(y/10);
     printf(" x= %d , y=%d \n",x,y);
     for(int i=0; i<25; i++)
     {
@@ -95,28 +95,47 @@ void spinDisplay (void)
     //glutPostRedisplay();
 }
 
-
-int cur=0;
-
+int score=25;
+int cur;
+int count=0;
 void myMouse(int b,int s,int x,int y)
 {
-
+    int j;
     if(b==GLUT_LEFT_BUTTON && s==GLUT_DOWN)
     {
-        int	i=findblock(x,y);
-        printf("findblock return %d\n",i);
-        if (allowed[cur][i]==-1)
-            glutIdleFunc(NULL);
+        if(count==0)
+        {
+            cur=findblock(x,y);
+            displayblock(cur);
+            hideblock(cur);
+            score-=1;
+            printf("%d\n",score);
+            count=-1;
+            for(int m=0; m<25; m++)
+                allowed[m][cur]=-1;
+        }
         else
         {
-            if(allowed[cur][i]==1)
+            int	i=findblock(x,y);
+            printf("findblock return %d\n",i);
+            if (allowed[cur][i]==-1)
+                glutIdleFunc(NULL);
+            else
             {
-                printf("allowed[%d][%d]",cur,i);
-                printf("findblock return %d\n",i);
-                displayblock(i);
+                if(allowed[cur][i]==1)
+                {
+                    score-=1;
+                    printf("%d\n",score);
+                    printf("allowed[%d][%d]\n",cur,i);
+                    printf("findblock return %d\n",i);
+                    displayblock(i);
+                }
+                hideblock(cur);
+                allowed[cur][i]=-1;
+                cur=i;
+                for(int m=0; m<25; m++)
+                    allowed[m][cur]=-1;
             }
-            hideblock(cur);
-            cur=i;
         }
     }
     glFlush();
@@ -125,6 +144,7 @@ void myMouse(int b,int s,int x,int y)
 
 void resizeHandler( int w, int h )
 {
+
     if( h==0 ) h=1;
     float aspecRatio = (float)w / (float)h;
     glViewport( 0, 0, w, h );
@@ -285,7 +305,7 @@ int main(int argc, char **argv)
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_SINGLE|GLUT_RGB);
     glutInitWindowSize(500, 500);
-    glutCreateWindow("Wumpus World");
+    glutCreateWindow("Knight Move");
     glutDisplayFunc(display);
     glutReshapeFunc(resizeHandler);
 //    glutIdleFunc(spinDisplay);
